@@ -21,7 +21,10 @@ MainWindow::MainWindow(QWidget *parent) :
     currPoint = QPoint(0,0);
     currEndPoint = QPoint(0,0);
     endPoint = QPoint(0,0);
-    setIsToolUsing(false);
+    setIsDrawingToolUsing(false);
+    picture = new QPicture();
+    renderArea = ui->renderArea;
+    currentTool = DrawingTool::None;
 
     createActions();
 }
@@ -32,9 +35,18 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::newFile()
-
 {
 
+}
+
+void MainWindow::chooseLineTool()
+{
+    currentTool = DrawingTool::Line;
+}
+
+void MainWindow::chooseRectTool()
+{
+    currentTool = DrawingTool::Rectangle;
 }
 
 void MainWindow::createActions()
@@ -74,13 +86,13 @@ void MainWindow::createActions()
     const QIcon lineIcon = QIcon(":/res/line.png");
     QAction *lineAct = new QAction(lineIcon, tr("&Line"), this);
     lineAct->setStatusTip(tr("Draw line"));
-    //connect(newAct, &QAction::triggered, this, &MainWindow::newFile);
+    connect(lineAct, &QAction::triggered, this, &MainWindow::chooseLineTool);
     ui->mainToolBar->addAction(lineAct);
 
     const QIcon rectIcon = QIcon(":/res/rectangle.png");
     QAction *rectAct = new QAction(rectIcon, tr("&Rectangle"), this);
     rectAct->setStatusTip(tr("Draw rectangle"));
-    //connect(newAct, &QAction::triggered, this, &MainWindow::newFile);
+    connect(rectAct, &QAction::triggered, this, &MainWindow::chooseRectTool);
     ui->mainToolBar->addAction(rectAct);
 
     const QIcon triIcon = QIcon(":/res/triangle.png");
@@ -95,10 +107,10 @@ void MainWindow::paintEvent(QPaintEvent *event)
    QPainter pt(this);
    if (getIsDrawingToolUsing())
    {
-       pt.drawLine(currPoint,currEndPoint);
+       drawRequest(&pt,currPoint,currEndPoint);
    }
    else {
-       pt.drawLine(currPoint,endPoint);
+       drawRequest(&pt,currPoint,endPoint);
    }
 
    QMainWindow::paintEvent(event);
@@ -124,4 +136,19 @@ void MainWindow::mouseMoveEvent(QMouseEvent *event)
     currEndPoint = event->pos();
     update();
     }
+}
+
+void MainWindow::drawRequest(QPainter *pt, QPoint p1, QPoint p2)
+{
+    switch (currentTool) {
+    case DrawingTool::Line:
+        pt->drawLine(p1, p2);
+        break;
+    case DrawingTool::Rectangle:
+        pt->drawRect(p1.x(),p1.y(), p2.x()-p1.x() ,p2.y()-p1.y() );
+        break;
+    default:
+        break;
+    }
+
 }
