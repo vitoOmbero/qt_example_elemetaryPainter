@@ -11,9 +11,6 @@ public:
     enum class FormState {Empty, Full};
     DrawableObject();
 
-    unsigned int getLayer() const;
-    void setLayer(unsigned int value);
-
     Point *getAnchor() const;
     void setAnchor(Point *value);
 
@@ -24,7 +21,7 @@ public:
     void setFormState(const FormState &value);
 
 private:
-    unsigned int layer;
+
     Point *anchor;
     int facingAngle;
     FormState formState;

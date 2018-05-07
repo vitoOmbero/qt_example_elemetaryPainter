@@ -19,6 +19,9 @@ public:
     void shiftToLayer(unsigned int itemIndex, unsigned int layerIndex);
     void shiftDelta(unsigned int itemIndex, int layerDelta);
 
+private:
+    void paint();
+
 
 
 //members

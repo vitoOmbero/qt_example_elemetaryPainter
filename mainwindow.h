@@ -12,12 +12,17 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
     QPoint currPoint;
+    QPoint currEndPoint;
     QPoint endPoint;
+    bool isToolUsing;
 
 
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+
+    bool getIsDrawingToolUsing() const;
+    void setIsDrawingToolUsing(bool value);
 
 private:
     Ui::MainWindow *ui;
@@ -30,6 +35,7 @@ protected:
     void paintEvent(QPaintEvent *event);
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
+    void mouseMoveEvent(QMouseEvent *event);
 };
 
 #endif // MAINWINDOW_H

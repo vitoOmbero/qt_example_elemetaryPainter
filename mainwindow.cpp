@@ -2,13 +2,27 @@
 #include "ui_mainwindow.h"
 #include <QtWidgets>
 
+bool MainWindow::getIsDrawingToolUsing() const
+{
+    return isToolUsing;
+}
+
+void MainWindow::setIsDrawingToolUsing(bool value)
+{
+    isToolUsing = value;
+}
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
     currPoint = QPoint(0,0);
+    currEndPoint = QPoint(0,0);
     endPoint = QPoint(0,0);
+    setIsToolUsing(false);
+
     createActions();
 }
 
@@ -30,7 +44,7 @@ void MainWindow::createActions()
     const QIcon toggleIcon = QIcon(":/res/fat.png");
     QAction *toggleAct = new QAction(toggleIcon, tr("&Bold"), this);
     toggleAct->setStatusTip(tr("Toggle width of lines"));
-    connect(toggleAct, &QAction::triggered, this, &MainWindow::newFile);
+    //connect(toggleAct, &QAction::triggered, this, &MainWindow::newFile);
     ui->mainToolBar->addAction(toggleAct);
 
     const QIcon delIcon = QIcon(":/res/eraser.png");
@@ -79,17 +93,35 @@ void MainWindow::createActions()
 void MainWindow::paintEvent(QPaintEvent *event)
 {
    QPainter pt(this);
-   pt.drawLine(currPoint,endPoint);
+   if (getIsDrawingToolUsing())
+   {
+       pt.drawLine(currPoint,currEndPoint);
+   }
+   else {
+       pt.drawLine(currPoint,endPoint);
+   }
+
    QMainWindow::paintEvent(event);
 }
 
 void MainWindow::mousePressEvent(QMouseEvent *event)
 {
     currPoint = event->pos();
+    setIsDrawingToolUsing(true);
 }
+
 
 void MainWindow::mouseReleaseEvent(QMouseEvent *event)
 {
     endPoint = event->pos();
+    setIsDrawingToolUsing(false);
     update();
+}
+
+void MainWindow::mouseMoveEvent(QMouseEvent *event)
+{
+    {
+    currEndPoint = event->pos();
+    update();
+    }
 }

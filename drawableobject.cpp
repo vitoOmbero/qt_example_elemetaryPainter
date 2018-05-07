@@ -5,16 +5,6 @@ DrawableObject::DrawableObject()
 
 }
 
-unsigned int DrawableObject::getLayer() const
-{
-    return layer;
-}
-
-void DrawableObject::setLayer(unsigned int value)
-{
-    layer = value;
-}
-
 Point *DrawableObject::getAnchor() const
 {
     return anchor;
