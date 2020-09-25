@@ -1,0 +1,6 @@
+cmake_minimum_required(VERSION 3.9)
+set(STACKSHOW "stack_showcase_2")
+project(${STACKSHOW})
+add_executable (generic_stack_showcase mainStackShowcase.cpp)
+target_link_libraries(generic_stack_showcase stack_lib_final)
+target_include_directories(generic_stack_showcase PUBLIC "../lib")

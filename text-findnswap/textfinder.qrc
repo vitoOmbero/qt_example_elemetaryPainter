@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file alias="input.txt">CMakeLists.txt</file>
+    </qresource>
+</RCC>
